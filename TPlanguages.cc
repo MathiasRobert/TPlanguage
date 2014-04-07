@@ -3,88 +3,109 @@
 
 using namespace std;
 
-enum alphabet{A,B,C,D}
-
-
-
-class Automate
+struct Automate
 {
-	private:
-		string _intitule;
-		int _nbEtats, _etatPuit, _etatTerm[], _nbEtatsTerm;
-		enum _matrice[][];
-		
-	public:
-		void setItitule(string s): _intitule(s); {}
-		void setEtats(int nbEtats): _nbEtats(nbEtats); {}
-		void setNbEtatsTerm(int nbEtatsTerm): _nbEtatsTerm(nbEtatsTerm); {}
-		void setEtatsTerm(int tmp, int i): _etatTerm[i](tmp) {}
-		void setMatrice(int etat1, int etat2, char carac)
-		{
-			enum _carac;
-			switch(carac)
-			{
-				case 'a':
-					_carac = A;
-					break;
-				case 'b':
-					_carac = B;
-					break;
-				case 'c':
-					_carac = C;
-					break;
-				case 'd':
-					_carac = D;
-					break;
-			}
-			_matrice[etat1][etat2] = _carac
-		}
+	string intitule;
+	int nbEtats, etatPuit, etatTerm[100], nbEtatsTerm, nbTrans;
+	int matrice[][4];
 };
 
-void afficher()
+int conversionVersInt(char a)
 {
-	string s;
-	int nbEtats, nbEtatsTerm, nbTrans;
-	cout << "Ititulé : " << endl;
-	cin >> s;
-	automate->setIntitule(s);
+	switch(a)
+	{
+		case 'a':
+			return 0;
+		case 'b':
+			return 1;
+		case 'c':
+			return 2;
+		case 'd':
+			return 3;
+	}
+	return 0;
+}
+char conversionVersChar(int a)
+{
+	switch(a)
+	{
+		case 0 :
+			return 'a';
+		case 1 :
+			return 'b';
+		case 2 :
+			return 'c';
+		case 3 :
+			return 'd';
+	}
+	return 0;
+}
+
+void initAutomate(Automate &a)
+{
+	cout << "Intitulé : " << endl;
+	cin >> a.intitule;
 	cout << "Nombre d'états : " << endl;
-	cin >> nbEtats;
-	automate->setEtats(nbEtats);
+	cin >> a.nbEtats;
 	cout << "Nombre de transitions : " << endl;
-	cin >> nbTrans;
-	cout << "Liste des trasitions : " << endl;
+	cin >> a.nbTrans;
+	cout << "Liste des transitions : " << endl;
 	int etat1, etat2;
 	char carac;
-	for (int i=0 ; i<nbTrans ; i++)
+	for (int i=0 ; i<a.nbEtats ; i++)
 	{
-		cout << "Transition " << i << endl;
-		cout << "Etat source : " << endl;
+		for (int j=0 ; j<4 ; j++)
+			a.matrice[i][j] = -1;
+	}
+	for (int i=0 ; i<a.nbTrans ; i++)
+	{
+		cout << "Transition " << i+1 << endl;
+		cout << "Etat source | Caractère | Etat cible" << endl;
 		cin >> etat1;
-		cout << "Caractère : " << endl;
 		cin >> carac;
-		cout << "Etat cible : " << endl;
 		cin >> etat2;
-		atomate->setMatrice(etat1,etat2,carac);
+        
+		a.matrice[etat1][conversionVersInt(carac)] = etat2;
 	}
 	cout << "Nombre d'états terminaux : " << endl;
-	cin >> nbEtatsTerm;
-	automate->setNbEtatsTerm(nbEtatsTerm);
+	cin >> a.nbEtatsTerm;
 	cout << "Etats terminaux : " << endl;
-	for (int i=0 ; i<nbEtatsTerm ; i++)
+	for (int i=0 ; i<a.nbEtatsTerm ; i++)
 	{
-		int tmp;
-		cout << "Etat terminal " << i << " : " << endl;
-		cin >> tmp;
-		automate->setEtatsTerm(tmp, i);
+		cout << "Etat terminal " << i+1 << " : " << endl;
+		cin >> a.etatTerm[i];
+	}
+}
+
+void afficheAutomate(Automate &a)
+{
+	cout << "Intitulé : " << a.intitule << endl;
+	cout << "Nombre d'états : " << a.nbEtats << endl;
+	cout << "Nombre de transitions : " << a.nbTrans << endl;
+	cout << "Liste des transitions : " << endl;
+    
+	for (int i=0 ; i<a.nbEtats ; i++)
+	{
+		for (int j=0 ; j<4 ; j++)
+		{
+			if(a.matrice[i][j] != -1)
+				cout << i << " " << conversionVersChar(j) << " " << a.matrice[i][j] << endl;
+		}
+	}
+	cout << "Nombre d'états terminaux : " << a.nbEtatsTerm << endl;
+	for (int i=0 ; i<a.nbEtatsTerm ; i++)
+	{
+		cout << "Etat terminal " << i+1 << " : " << a.etatTerm[i] << endl;
 	}
 }
 
 int main()
 {
-	Automate *automate;
-	afficher();
+	Automate automate;
+	initAutomate(automate);
+	afficheAutomate(automate);
 	return 0;
 }
+
 
 
