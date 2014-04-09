@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <fstream>
 
 using namespace std;
 
@@ -15,13 +16,13 @@ int conversionVersInt(char a)
 	switch(a)
 	{
 		case 'a':
-			return 0;
+		return 0;
 		case 'b':
-			return 1;
+		return 1;
 		case 'c':
-			return 2;
+		return 2;
 		case 'd':
-			return 3;
+		return 3;
 	}
 	return 0;
 }
@@ -30,15 +31,60 @@ char conversionVersChar(int a)
 	switch(a)
 	{
 		case 0 :
-			return 'a';
+		return 'a';
 		case 1 :
-			return 'b';
+		return 'b';
 		case 2 :
-			return 'c';
+		return 'c';
 		case 3 :
-			return 'd';
+		return 'd';
 	}
 	return 0;
+}
+
+int saveAutomate(Automate &au)
+{
+	ofstream myfile;
+	int etat = 0; // fichier non ouvert
+	myfile.open("test.bin");
+	if(myfile.is_open())
+	{
+		myfile << au.nbEtats << "|";
+		myfile << au.nbTrans << "|";
+
+		for (int i=0 ; i<au.nbEtats ; i++)
+		{
+			for (int j=0 ; j<4 ; j++)
+			{
+				if(au.matrice[i][j] != -1)
+					myfile << au.matrice[i][j] << "|";
+			}
+		}
+		myfile << au.nbEtatsTerm;
+		for (int i=0 ; i<au.nbEtatsTerm ; i++)
+		{
+			myfile << au.etatTerm[i] << "|";
+		}
+		myfile.close();
+		etat = 1; //fichier ouvert, procédure finie
+	}
+	return etat;
+}
+
+void loadAutomate(Automate *a)
+{
+	ifstream myfile;
+	string mydatas = "";
+	char donnee;
+	myfile.open("test.bin");
+
+	if(myfile.is_open())
+	{
+	while ( getline (myfile,mydatas) )
+    {}
+    myfile.close();
+	}
+	a->nbEtats = (int)mydatas[0];
 }
 
 void initAutomate(Automate &a)
@@ -64,7 +110,7 @@ void initAutomate(Automate &a)
 		cin >> etat1;
 		cin >> carac;
 		cin >> etat2;
-        
+
 		a.matrice[etat1][conversionVersInt(carac)] = etat2;
 	}
 	cout << "Nombre d'états terminaux : " << endl;
@@ -83,7 +129,7 @@ void afficheAutomate(Automate &a)
 	cout << "Nombre d'états : " << a.nbEtats << endl;
 	cout << "Nombre de transitions : " << a.nbTrans << endl;
 	cout << "Liste des transitions : " << endl;
-    
+
 	for (int i=0 ; i<a.nbEtats ; i++)
 	{
 		for (int j=0 ; j<4 ; j++)
@@ -104,6 +150,12 @@ int main()
 	Automate automate;
 	initAutomate(automate);
 	afficheAutomate(automate);
+	/*
+	// Test sauvegardes fichierS
+	saveAutomate(automate);
+	loadAutomate(&automate);
+	afficheAutomate(automate);
+	*/
 	return 0;
 }
 
