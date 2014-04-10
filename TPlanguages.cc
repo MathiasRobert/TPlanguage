@@ -11,6 +11,14 @@ struct Automate
 	int matrice[][4];
 };
 
+int conversionVersInt(char a);
+char conversionVersChar(int a);
+bool menu(Automate &au);
+int saveAutomate(Automate &au);
+void loadAutomate(Automate *a);
+void initAutomate(Automate &a);
+void afficheAutomate(Automate &a);
+
 int conversionVersInt(char a)
 {
 	switch(a)
@@ -26,6 +34,7 @@ int conversionVersInt(char a)
 	}
 	return 0;
 }
+
 char conversionVersChar(int a)
 {
 	switch(a)
@@ -40,6 +49,48 @@ char conversionVersChar(int a)
 		return 'd';
 	}
 	return 0;
+}
+
+bool menu(Automate &au)
+{
+	bool fini = false;
+	int a;
+	cout << "------------------------------------------------------------------" << endl;
+	cout << "|                 BIENVENUE SUR L'AUTOMATOR                      |" << endl;
+	cout << "------------------------------------------------------------------" << endl;
+	cout << "Que souhaitez vous faire ?" << endl;
+	cout << "1. Créer un automate" << endl;
+	cout << "2. Voir l'automate" << endl;
+	cout << "3. Sauvegarder l'automate" << endl;
+	cout << "4. Charger un automate" << endl;
+	cout << "5. Utiliser l'automate actuel" << endl;
+	cout << "6. Quitter" << endl;
+	do{
+		cin >> a;
+	}while(a < 1 || a > 5);
+
+	switch(a)
+	{
+		case 1:
+		initAutomate(au);
+			break;
+		case 2:
+		afficheAutomate(au);
+			break;
+		case 3:
+		saveAutomate(au);
+			break;
+		case 4:
+		loadAutomate(&au);
+			break;
+		case 5:
+		// todo
+			break;
+		case 6:
+			fini = true;
+			break;
+	};
+	return fini;
 }
 
 int saveAutomate(Automate &au)
@@ -80,11 +131,11 @@ void loadAutomate(Automate *a)
 
 	if(myfile.is_open())
 	{
-	while ( getline (myfile,mydatas) )
-    {}
-    myfile.close();
-	}
-	a->nbEtats = (int)mydatas[0];
+		while ( getline (myfile,mydatas) )
+		{}
+	myfile.close();
+}
+a->nbEtats = (int)mydatas[0];
 }
 
 void initAutomate(Automate &a)
@@ -148,15 +199,18 @@ void afficheAutomate(Automate &a)
 int main()
 {
 	Automate automate;
-	initAutomate(automate);
-	afficheAutomate(automate);
+
+    bool fini = false;
+	while(!fini)
+        fini = menu(automate);
+
 	/*
 	// Test sauvegardes fichierS
 	saveAutomate(automate);
 	loadAutomate(&automate);
 	afficheAutomate(automate);
 	*/
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 
